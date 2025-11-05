@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Auto Run Example</title>
+  <script>
+    window.onload = () => {
+      const now = new Date();
+      document.getElementById("time").innerText = now.toLocaleTimeString();
+    };
+
+    function changeColor() {
+      document.body.style.backgroundColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+    }
+  </script>
+</head>
+<body>
+  <h1>Welcome!</h1>
+  <p>The page loaded at <span id="time"></span>.</p>
+  <button onclick="changeColor()">Change background color</button>
+</body>
+</html>
