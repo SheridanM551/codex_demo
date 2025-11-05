@@ -3,20 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <title>Auto Run Example</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    button {
+      font-size: 1rem;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: 0.5rem;
+      cursor: pointer;
+      background-color: rgba(0, 0, 0, 0.75);
+      color: #fff;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .info-card {
+      background-color: rgba(255, 255, 255, 0.2);
+      padding: 1rem 1.5rem;
+      border-radius: 0.75rem;
+      backdrop-filter: blur(6px);
+      text-align: center;
+      margin-bottom: 1.5rem;
+      min-width: 260px;
+    }
+
+    .info-card strong {
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+
+    .info-card span {
+      font-family: "Fira Mono", "Courier New", monospace;
+      font-size: 1.1rem;
+    }
+  </style>
   <script>
     window.onload = () => {
       const now = new Date();
       document.getElementById("time").innerText = now.toLocaleTimeString();
+      changeColor();
     };
 
     function changeColor() {
-      document.body.style.backgroundColor = '#' + Math.floor(Math.random()*16777215).toString(16);
+      const colorNumber = Math.floor(Math.random() * 0xffffff);
+      const hex = colorNumber.toString(16).padStart(6, "0");
+      const backgroundColor = `#${hex}`;
+      document.body.style.backgroundColor = backgroundColor;
+
+      const red = (colorNumber >> 16) & 0xff;
+      const green = (colorNumber >> 8) & 0xff;
+      const blue = colorNumber & 0xff;
+      const luminance = 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+      const isLightBackground = luminance > 140;
+      const button = document.querySelector("button");
+
+      document.body.style.color = isLightBackground ? "#111" : "#f7f7f7";
+
+      if (button) {
+        button.style.backgroundColor = isLightBackground
+          ? "rgba(0, 0, 0, 0.75)"
+          : "rgba(255, 255, 255, 0.85)";
+        button.style.color = isLightBackground ? "#fff" : "#111";
+        button.style.boxShadow = isLightBackground
+          ? "0 10px 20px rgba(0, 0, 0, 0.2)"
+          : "0 10px 20px rgba(0, 0, 0, 0.4)";
+      }
+
+      const colorCodeElement = document.getElementById("color-code");
+      if (colorCodeElement) {
+        colorCodeElement.innerText = `#${hex}`.toUpperCase();
+      }
     }
   </script>
 </head>
 <body>
-  <h1>Welcome!</h1>
-  <p>The page loaded at <span id="time"></span>.</p>
+  <div class="info-card">
+    <strong>Current color</strong>
+    <div><span id="color-code">#FFFFFF</span></div>
+    <p>The page loaded at <span id="time"></span>.</p>
+  </div>
   <button onclick="changeColor()">Change background color</button>
 </body>
 </html>
